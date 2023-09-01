@@ -25,10 +25,9 @@ struct ContentView: View {
     }
 
     let strokeStyle = StrokeStyle(lineWidth: 15, lineCap: .round)
-   // let buttonIcon = timerRunning ? "pause.rectangle.fill" : "play.rectangle.fill"
-    let buttonIcon = "play.rectangle.fill"
 
     var body: some View {
+        let buttonIcon = timerRunning ? "pause.rectangle.fill" : "play.rectangle.fill"
         ZStack {
             Circle()
                 .stroke(.gray.opacity(0.2), style: strokeStyle)
@@ -53,7 +52,16 @@ struct ContentView: View {
                         countdownTime = defaultTime
                     }
             }
-        }
+        }.frame(width: 300, height: 300)
+            .onReceive(timer) { _ in
+                guard timerRunning else { return }
+                if countdownTime > 0 {
+                    countdownTime -= 1
+                } else {
+                    timerRunning = false
+                    countdownTime = defaultTime
+                }
+            }
     }
 }
 
